@@ -21,6 +21,8 @@ services:
       - backend_uploads:/backend/src/uploads
       - backend_static:/backend/src/static
     environment:
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      - IS_PRODUCTION=True
       - DB_NAME=main
       - DB_USER=postgres
       - DB_PASSWORD=postgres
