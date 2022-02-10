@@ -21,8 +21,10 @@ services:
       - backend_uploads:/backend/src/uploads
       - backend_static:/backend/src/static
     environment:
+      - MODE=production
       - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
-      - IS_PRODUCTION=True
+      - DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS}
+      - DJANGO_CORS_ALLOWED_ORIGINS=${DJANGO_CORS_ALLOWED_ORIGINS}
       - DB_NAME=main
       - DB_USER=postgres
       - DB_PASSWORD=postgres
@@ -35,8 +37,11 @@ services:
   frontend:
     build:
       context: ./frontend
+    command: sh -c "env > .env && yarn build"
     volumes:
       - frontend_build:/frontend/dist
+    environment:
+      - API_URL=${API_URL}
 
   app:
     image: nginx:1.21.6
@@ -46,14 +51,13 @@ services:
       - ./app/nginx-setup.conf:/etc/nginx/conf.d/default.conf:ro
       - frontend_build:/var/www/frontend
       - backend_static:/var/www/backend/static
+      - backend_uploads:/var/www/backend/uploads
     depends_on:
       - backend
       - frontend
 
 volumes:
-  frontend_build:
   db:
-    driver: local
   backend_uploads:
-    driver: local
   backend_static:
+  frontend_build:
