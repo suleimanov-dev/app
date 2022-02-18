@@ -9,8 +9,6 @@ services:
       - POSTGRES_DB=main
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-    ports:
-      - "5432:5432"
 
   backend:
     restart: always
@@ -30,8 +28,6 @@ services:
       - DB_USER=postgres
       - DB_PASSWORD=postgres
       - DB_HOST=db
-    ports:
-      - "8000:8000"
     depends_on:
       - db
 
